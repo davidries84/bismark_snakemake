@@ -1,0 +1,90 @@
+{
+    "__default__" :
+    {
+        "queue"     : "normal",
+        "nCPUs"     : "5",
+        "memory"    : 10000,
+        "resources" : "\"rusage[mem=5000] span[hosts=1]\"",
+        "name"      : "JOBNAME.{rule}.{wildcards}",
+        "output"    : "logs/cluster/{rule}.{wildcards}.out",
+        "error"     : "logs/cluster/{rule}.{wildcards}.err"
+    },
+
+
+	"trimmomatic_pe" :
+	{
+	  "queue"     : "multicore20",
+	  "nCPUs"     : "8",
+	  "memory"    : 10000,
+	  "resources" : "\" rusage[mem=1000] span[hosts=1]\"",
+	  "name"      : "JOBNAME.{rule}.{wildcards}",
+	  "output"    : "logs/cluster/{rule}.{wildcards}.out",
+	  "error"     : "logs/cluster/{rule}.{wildcards}.err"
+	},
+
+    "deduplicate_bismark" :
+    {
+        "queue"     : "normal",
+        "nCPUs"     : "5",
+        "memory"    : 50000,
+        "resources" : "\"rusage[mem=20000] span[hosts=1]\"",
+        "name"      : "JOBNAME.{rule}.{wildcards}",
+        "output"    : "logs/cluster/{rule}.{wildcards}.out",
+        "error"     : "logs/cluster/{rule}.{wildcards}.err"
+    },
+    "fastqc_trimmed" :
+    {
+      "queue"     : "multicore20",
+      "nCPUs"     : "6",
+      "memory"    : 10000,
+      "resources" : "\" rusage[mem=5000] span[hosts=1]\"",
+      "name"      : "JOBNAME.{rule}.{wildcards}",
+      "output"    : "logs/cluster/{rule}.{wildcards}.out",
+      "error"     : "logs/cluster/{rule}.{wildcards}.err"
+    },
+
+    "genomewidecytosinemethylationreport" :
+    {
+        "queue"     : "normal",
+        "nCPUs"     : "5",
+        "memory"    : 120000,
+        "resources" : "\"rusage[mem=90000] span[hosts=1]\"",
+        "name"      : "JOBNAME.{rule}.{wildcards}",
+        "output"    : "logs/cluster/{rule}.{wildcards}.out",
+        "error"     : "logs/cluster/{rule}.{wildcards}.err"
+    },
+
+    "bismark_methylation_extractor" :
+    {
+        "queue"     : "multicore40",
+        "nCPUs"     : "30",
+        "memory"    : 25000,
+        "resources" : "\" rusage[mem=20000] span[hosts=1]\"",
+        "name"      : "JOBNAME.{rule}.{wildcards}",
+        "output"    : "logs/cluster/{rule}.{wildcards}.out",
+        "error"     : "logs/cluster/{rule}.{wildcards}.err"
+    },
+
+    "bismark_genome_preparation" :
+    {
+      "queue"     : "multicore20",
+      "nCPUs"     : "10",
+      "memory"    : 150000,
+      "resources" : "\" rusage[mem=100000] span[hosts=1]\"",
+      "name"      : "JOBNAME.{rule}.{wildcards}",
+      "output"    : "logs/cluster/{rule}.{wildcards}.out",
+      "error"     : "logs/cluster/{rule}.{wildcards}.err"
+    },
+
+    "bismark_alignment" :
+    {
+      "queue"     : "ioheavy",
+      "nCPUs"     : "10",
+      "memory"    : 100000,
+      "resources" : "\" rusage[mem=60000] span[hosts=1]\"",
+      "name"      : "JOBNAME.{rule}.{wildcards}",
+      "output"    : "logs/cluster/{rule}.{wildcards}.out",
+      "error"     : "logs/cluster/{rule}.{wildcards}.err"
+    }
+
+}

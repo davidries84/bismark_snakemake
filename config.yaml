@@ -1,0 +1,28 @@
+# path or URL to sample sheet (TSV format, columns: sample, condition, ...)
+samples: samples_test.tsv
+# path or URL to sequencing unit sheet (TSV format, columns: sample, unit, fq1, fq2)
+# Units are technical replicates (e.g. lanes, or resequencing of the same biological
+# sample).
+units: units_test.tsv
+
+# the sequencing adapter
+#adapter: ACGGATCGATCGATCGATCGAT
+
+ref:
+  folder: "0_reference/"
+  # the fasta file
+  fasta: "0_reference/160404_barley_pseudomolecules_masked+ChrC.fasta"
+  # gtf file with transcripts
+  #annotation: "path/to/annotation.gtf"
+
+
+params:
+
+  trimmomatic:
+    pe:
+      trimmer:
+        # See trimmomatic manual for adding additional options, e.g. for adapter trimming.
+        - "LEADING:3"
+        - "TRAILING:3"
+        - "SLIDINGWINDOW:4:15"
+        - "MINLEN:36"
