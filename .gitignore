@@ -1,6 +1,8 @@
 .snakemake
 0_raw_reads/*
+!0_raw_reads/
 0_reference/*
+!0_reference/
 1_trimmed_reads
 2_bismark_mapped
 3_deduplicated
