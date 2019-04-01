@@ -34,7 +34,7 @@ BISMARK_METHYLATION_EXTRACTOR = config["bismark"]["bismark_methylation_extractor
 BAM2NUC = config["bismark"]["bam2nuc"]
 COVERAGE2CYTOSINE = config["bismark"]["coverage2cytosine"]
 
-VIEWBS = config["viewbs"]
+VIEWBS = config["viewbs"]["viewbs"]
 
 CREATEVIEWBSFILELIST = config["scripts"]["createviewbsfilelist"]
 BISMARKCOV2TILES = config["scripts"]["bismarkcov2tiles"]
