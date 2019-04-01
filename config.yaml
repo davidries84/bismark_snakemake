@@ -12,8 +12,31 @@ ref:
   folder: "0_reference/"
   # the fasta file
   fasta: "0_reference/160404_barley_pseudomolecules_masked+ChrC.fasta"
+
   # gtf file with transcripts
   #annotation: "path/to/annotation.gtf"
+
+chloroplast: "NC_008590.1"
+
+methylation_contexts:  ['CG','CHG','CHH']
+
+
+bismark:
+  bismark: "/biodata/irg/grp_stich/Hv-DRR-pop/bin/bismark_v0.20.1/Bismark/bismark"
+  bismark_genome_preparation: "/biodata/irg/grp_stich/Hv-DRR-pop/bin/bismark_v0.20.1/Bismark/bismark_genome_preparation"
+  deduplicate_bismark: "/biodata/irg/grp_stich/Hv-DRR-pop/bin/bismark_v0.20.1/Bismark/deduplicate_bismark"
+  bismark_methylation_extractor: "/biodata/irg/grp_stich/Hv-DRR-pop/bin/bismark_v0.20.1/Bismark/bismark_methylation_extractor"
+  bam2nuc: "/biodata/irg/grp_stich/Hv-DRR-pop/bin/bismark_v0.20.1/Bismark/bam2nuc"
+  coverage2cytosine: "/biodata/irg/grp_stich/Hv-DRR-pop/bin/bismark_v0.20.1/Bismark/coverage2cytosine"
+
+viewbs:
+  viewbs: "/biodata/irg/grp_stich/Hv-DRR-pop/bin/ViewBS_0.6.1/ViewBS-0.1.6/ViewBS"
+
+scripts:
+  folder: "scripts"
+  createviewbsfilelist: "scripts/createViewBSFileList.py"
+  bismarkcov2tiles: "scripts/bismarkcov2tiles.py"
+
 
 
 params:

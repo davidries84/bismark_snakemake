@@ -20,21 +20,24 @@ RDS = ['R1','R2']
 
 REFERENCE = config["ref"]["folder"]
 FASTA = config["ref"]["fasta"]
-CHLOROPLAST = "NC_008590.1"
+CHLOROPLAST = config["chloroplast"]
 
-CONTEXTS = ['CG','CHG','CHH']
-
-
+CONTEXTS = config["methylation_contexts"]
 
 
-BISMARK_GENOME_PREPARATION = "/biodata/irg/grp_stich/Hv-DRR-pop/bin/bismark_v0.20.1/Bismark/bismark_genome_preparation"
-BISMARK = "/biodata/irg/grp_stich/Hv-DRR-pop/bin/bismark_v0.20.1/Bismark/bismark"
-DEDUPLICATE_BISMARK = "/biodata/irg/grp_stich/Hv-DRR-pop/bin/bismark_v0.20.1/Bismark/deduplicate_bismark"
-BISMARK_METHYLATION_EXTRACTOR = "/biodata/irg/grp_stich/Hv-DRR-pop/bin/bismark_v0.20.1/Bismark/bismark_methylation_extractor"
-
-VIEWBS = "/biodata/irg/grp_stich/Hv-DRR-pop/bin/ViewBS_0.6.1/ViewBS-0.1.6/ViewBS"
 
 
+BISMARK_GENOME_PREPARATION = config["bismark"]["bismark_genome_preparation"]
+BISMARK = config["bismark"]["bismark"]
+DEDUPLICATE_BISMARK = config["bismark"]["deduplicate_bismark"]
+BISMARK_METHYLATION_EXTRACTOR = config["bismark"]["bismark_methylation_extractor"]
+BAM2NUC = config["bismark"]["bam2nuc"]
+COVERAGE2CYTOSINE = config["bismark"]["coverage2cytosine"]
+
+VIEWBS = config["viewbs"]
+
+CREATEVIEWBSFILELIST = config["scripts"]["createviewbsfilelist"]
+BISMARKCOV2TILES = config["scripts"]["bismarkcov2tiles"]
 
 
 def get_fastq(wildcards):
@@ -198,7 +201,7 @@ rule deduplicate_bismark:
     input:
         unpack(get_bam)
     output:
-        files = "3_deduplicated/{sample}_pe.deduplicated.bam" 
+        files = "3_deduplicated/{sample}_pe.deduplicated.bam"
     params:
         pe = "-p",
         outdir = "-o 3_deduplicated",
@@ -209,7 +212,7 @@ rule deduplicate_bismark:
         "logs/deduplicate_bismark_{sample}.log"
     message: """-----------    deduplicating reads of {input.bam} to {output.files} ----------"""
     shell:
-        DEDUPLICATE_BISMARK + " {params.pe} {params.outdir} {params.bam} {params.mult}  {input.bam} && mv {params.mv} {output.files}"
+        "{DEDUPLICATE_BISMARK} {params.pe} {params.outdir} {params.bam} {params.mult}  {input.bam} && mv {params.mv} {output.files}"
 
 
 
@@ -224,7 +227,7 @@ rule bam2nuc:
     message: """ -------- calculating nucleotide stats for {input.bam}  ------- """
 
     shell:
-        "/biodata/irg/grp_stich/Hv-DRR-pop/bin/bismark_v0.20.1/Bismark/bam2nuc --dir 5_bismark_summary --genome_folder {input.fa}  {input.bam} "
+        "{BAM2NUC} --dir 5_bismark_summary --genome_folder {input.fa}  {input.bam} "
 
 rule bismark_methylation_extractor:
     input:
@@ -234,7 +237,6 @@ rule bismark_methylation_extractor:
         "4_methylation_extraction/CpG_context_{sample}_pe.deduplicated.txt.gz",
         "4_methylation_extraction/CHG_context_{sample}_pe.deduplicated.txt.gz",
         "4_methylation_extraction/CHH_context_{sample}_pe.deduplicated.txt.gz",
-       # "4_methylation_extraction/{sample}.bis_rep.cov.CX_report.txt", Wie muss der richtig heißen?
         "4_methylation_extraction/{sample}_pe.deduplicated_splitting_report.txt",
         "4_methylation_extraction/{sample}_pe.deduplicated.M-bias.txt",
         "4_methylation_extraction/{sample}_pe.deduplicated.bedGraph.gz",
@@ -260,7 +262,7 @@ rule genomewidecytosinemethylationreport:
      "logs/bismark_genomewidecytosinemethylationreport_{sample}.log"
     message: """ -------- Witing genome wide cytosine methylation report for {input.bismarkcov}  ------- """
     shell:
-        "/biodata/irg/grp_stich/Hv-DRR-pop/bin/bismark_v0.20.1/Bismark/coverage2cytosine -CX -o {output} --genome_folder {input.fa} {input.bismarkcov}"
+        "{COVERAGE2CYTOSINE} -CX -o {output} --genome_folder {input.fa} {input.bismarkcov}"
 
 
 
@@ -292,7 +294,7 @@ rule cytosinecoveragetiling: # einen pro C context
         "logs/cytosinecoveragetiling_{sample}_{context}.log"
     message: """ -------- merging coverage for sample {wildcards.sample} and context {wildcards.context} in tiles   ------- """
     shell:
-        "zcat {input} | python scripts/bismarkcov2tiles.py > {output}"
+        "zcat {input} | python {BISMARKCOV2TILES} > {output}"
 
 
 rule bgzipgwcmr:
@@ -328,7 +330,7 @@ rule ViewBS_samplefile:
         "logs/ViewBS_samplefile.log"
     message: """ -------- create list of samples for ViewBS  ------- """
     shell:
-        "python scripts/createViewBSFileList.py {input.files} > 6_viewBS/inputfiles.txt"
+        "python {CREATEVIEWBSFILELIST} {input.files} > 6_viewBS/inputfiles.txt"
 
 rule ViewBS_MethCoverage:
     input:
@@ -380,7 +382,7 @@ rule ViewBS_MethGeno:
     input:
         files="6_viewBS/inputfiles.txt",
         fa=FASTA,
-	fai = FASTA + ".fai",
+	    fai = FASTA + ".fai",
         indexes=expand("6_viewBS/{sample}.bis_rep.cov.CX_report.txt.gz.csi", sample=SAMPLES.index)
     output:
         directory("6_viewBS/MethGeno_{context}")
