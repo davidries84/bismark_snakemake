@@ -78,7 +78,7 @@
 
     "bismark_alignment" :
     {
-      "queue"     : "ioheavy",
+      "queue"     : "multicore40",
       "nCPUs"     : "10",
       "memory"    : 100000,
       "resources" : "\" rusage[mem=60000] span[hosts=1]\"",
