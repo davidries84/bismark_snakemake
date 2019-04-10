@@ -107,11 +107,11 @@ rule trimmomatic_pe:
     input:
         unpack(get_fastq)
     output:
-        r1=temp("1_trimmed_reads/{sample}-{unit}.1.fastq.gz"),
-        r2=temp("1_trimmed_reads/{sample}-{unit}.2.fastq.gz"),
+        r1="1_trimmed_reads/{sample}-{unit}.1.fastq.gz",
+        r2="1_trimmed_reads/{sample}-{unit}.2.fastq.gz",
         r1_unpaired=temp("1_trimmed_reads/{sample}-{unit}.1.unpaired.fastq.gz"),
         r2_unpaired=temp("1_trimmed_reads/{sample}-{unit}.2.unpaired.fastq.gz"),
-        trimlog="1_trimmed_reads/{sample}-{unit}.trimlog.txt"
+        trimlog=temp("1_trimmed_reads/{sample}-{unit}.trimlog.txt")
     log:
         "logs/trimmomatic/{sample}-{unit}.log"
     params:
