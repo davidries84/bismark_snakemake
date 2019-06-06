@@ -1,0 +1,6 @@
+sample	unit	fq1	fq2
+A	1	0_raw_reads/2289_A_run376_GGTAGCAT_S4_L001_R1_001.fastq.gz	0_raw_reads/2289_A_run376_GGTAGCAT_S4_L001_R2_001.fastq.gz
+A	2	0_raw_reads/2289_A_run376_GGTAGCAT_S4_L002_R1_001.fastq.gz	0_raw_reads/2289_A_run376_GGTAGCAT_S4_L002_R2_001.fastq.gz
+B	1	0_raw_reads/2289_B_run376_ATGAGCAT_S5_L001_R1_001_f.fastq.gz	0_raw_reads/2289_B_run376_ATGAGCAT_S5_L001_R2_001_f.fastq.gz
+B	2	0_raw_reads/2753_B_run426_CAACTAAT_S21_L003_R1_001.fastq.gz	0_raw_reads/2753_B_run426_CAACTAAT_S21_L003_R2_001.fastq.gz
+B	3	0_raw_reads/2289_B_run378_ATGAGCAT_S2_L001_R1_001_f.fastq.gz	0_raw_reads/2289_B_run378_ATGAGCAT_S2_L001_R2_001_f.fastq.gz

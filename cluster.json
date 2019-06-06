@@ -48,12 +48,23 @@
         "queue"     : "normal",
         "nCPUs"     : "5",
         "memory"    : 120000,
-        "resources" : "\"rusage[mem=90000] span[hosts=1]\"",
+        "resources" : "\"rusage[mem=100000] span[hosts=1]\"",
         "name"      : "JOBNAME.{rule}.{wildcards}",
         "output"    : "logs/cluster/{rule}.{wildcards}.out",
         "error"     : "logs/cluster/{rule}.{wildcards}.err"
     },
 
+    "summarizedinucleotides" :
+    {
+	"queue"     : "normal",
+	"nCPUs"     : "5",
+	"memory"    : 120000,
+	"resources" : "\"rusage[mem=100000] span[hosts=1]\"",
+	"name"      : "JOBNAME.{rule}.{wildcards}",
+	"output"    : "logs/cluster/{rule}.{wildcards}.out",
+	"error"     : "logs/cluster/{rule}.{wildcards}.err"
+    },
+    
     "bismark_methylation_extractor" :
     {
         "queue"     : "multicore40",

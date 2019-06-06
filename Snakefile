@@ -94,6 +94,8 @@ rule all:
         #expand("1_trimmed_reads/{sample}-{unit}.1.fastq.gz", sample=SAMPLES.index, unit = UNITS["unit"]),
         #expand("1_trimmed_reads/{sample}-{unit}.2.fastq.gz", sample=SAMPLES.index, unit = UNITS["unit"]),
         expand("4_methylation_extraction/{sample}_{context}_100bp.csv", sample = SAMPLES.index, context=CONTEXTS),
+	expand("4_methylation_extraction/{sample}.bis_rep.cov.DN_report.txt", sample = SAMPLES.index),
+	expand("3_deduplicated/{sample}_pe.deduplicated.bam", sample = SAMPLES.index),
         #expand("1_trimmed_reads/{sample}-{unit}.{rd}_fastqc.html",sample = SAMPLES.index, unit = UNITS["unit"] , rd = [1,2]),
         "6_viewBS/methCoverage",
         "6_viewBS/methGlobal",
@@ -263,6 +265,19 @@ rule genomewidecytosinemethylationreport:
     message: """ -------- Witing genome wide cytosine methylation report for {input.bismarkcov}  ------- """
     shell:
         "{COVERAGE2CYTOSINE} -CX -o {output} --genome_folder {input.fa} {input.bismarkcov}"
+
+rule summarizedinucleotides:
+    input:
+        fa=REFERENCE,
+        bismarkcov="4_methylation_extraction/{sample}_pe.deduplicated.bismark.cov.gz"
+    output:
+        "4_methylation_extraction/{sample}.bis_rep.cov.DN_report.txt.CpG_report.txt",
+        "4_methylation_extraction/{sample}.bis_rep.cov.DN_report.txt.CpG_report.merged_CpG_evidence.cov"
+    log:
+        "logs/bismark_summarizedinucleotides_{sample}.log"
+    message: """ -------- Witing genome wide cytosine methylation report with merged CpG for {input.bismarkcov}  ------- """
+    shell:
+        "{COVERAGE2CYTOSINE} --merge_CpG -o {output} --genome_folder {input.fa} {input.bismarkcov}"
 
 
 
