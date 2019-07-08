@@ -94,7 +94,8 @@ rule all:
         #expand("1_trimmed_reads/{sample}-{unit}.1.fastq.gz", sample=SAMPLES.index, unit = UNITS["unit"]),
         #expand("1_trimmed_reads/{sample}-{unit}.2.fastq.gz", sample=SAMPLES.index, unit = UNITS["unit"]),
         expand("4_methylation_extraction/{sample}_{context}_100bp.csv", sample = SAMPLES.index, context=CONTEXTS),
-	expand("4_methylation_extraction/{sample}.bis_rep.cov.DN_report.txt", sample = SAMPLES.index),
+	#expand("4_methylation_extraction/{sample}.bis_rep.cov.DN_report.txt", sample = SAMPLES.index),
+	expand("4_methylation_extraction/{sample}_{context}.contextWithStrand.cov.gz", sample = SAMPLES.index, context=CONTEXTS),
 	expand("3_deduplicated/{sample}_pe.deduplicated.bam", sample = SAMPLES.index),
         #expand("1_trimmed_reads/{sample}-{unit}.{rd}_fastqc.html",sample = SAMPLES.index, unit = UNITS["unit"] , rd = [1,2]),
         "6_viewBS/methCoverage",
@@ -298,6 +299,26 @@ rule cContextCovFileFromGWCMR:
         "  printf ("r'"%s\t%s\t%s\t%s\t%s\t%s\n"'", $1, $2, $2, 0, $4, $5);"
         " else  printf ("r'"%s\t%s\t%s\t%s\t%s\t%s\n"'", $1, $2, $2, ($4/($4+$5))*100, $4, $5);}}' "
         "| gzip > {output}"
+
+
+rule cContextCovFileWithStrandInfoFromGWCMR:
+    input:
+        gwcmr="4_methylation_extraction/{sample}.bis_rep.cov.CX_report.txt"
+    output:
+        "4_methylation_extraction/{sample}_{context}.contextWithStrand.cov.gz"
+    threads: 3
+    params:
+        con = "{context}"
+    log:
+        "logs/MethylationCoverageFiles/{sample}_{context}.contextWithStrand.cov.log"
+    message: """ -------- Writing methylation coverage file with strand info for sample {wildcards.sample} and context {wildcards.context}  ------- """
+    shell:
+        " grep "r'"\s{params.con}\s"'" {input.gwcmr}   "
+        "| awk   '{{ if ($4 == 0 && $5 == 0) ; else if ($4 == 0) "
+        "  printf ("r'"%s\t%s\t%s\t%s\t%s\t%s\t%s\n"'", $1, $2, $2, 0, $4, $5, $3);"
+        " else  printf ("r'"%s\t%s\t%s\t%s\t%s\t%s\t%s\n"'", $1, $2, $2, ($4/($4+$5))*100, $4, $5, $3);}}' "
+        "| gzip > {output}"
+												    
 
 
 rule cytosinecoveragetiling: # einen pro C context
