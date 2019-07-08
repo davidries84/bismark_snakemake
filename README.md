@@ -10,7 +10,7 @@ Please adapt the files config.yaml, samples.tsv and units.tsv to match your setu
 
 # Workflow
 
-[DAG of the Workflow](dag.png)
+![DAG of the Workflow](dag.png)
 
 # ToDo
 
