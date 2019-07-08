@@ -3,6 +3,15 @@ Snakemake workflow to process and analyse Bisulfite-Sequencing data
 
 [![Snakemake](https://img.shields.io/badge/snakemake-≥3.5.2-brightgreen.svg?style=flat-square)](https://snakemake.bitbucket.io)
 
+You need to install Bismark (V >= 0.21.0) https://github.com/FelixKrueger/Bismark
+For some Functions, you also need to install ViewBS (V >= 0.1.6) https://github.com/xie186/ViewBS
+
+Please adapt the files config.yaml, samples.tsv and units.tsv to match your setup.
+
+# Workflow
+
+[DAG of the Workflow](dag.svg)
+
 # ToDo
 
 ## Visualization
