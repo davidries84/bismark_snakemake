@@ -1,7 +1,7 @@
 # bismark_snakemake
 Snakemake workflow to process and analyse Bisulfite-Sequencing data 
 
-
+[![Snakemake](https://img.shields.io/badge/snakemake-≥3.5.2-brightgreen.svg?style=flat-square)](https://snakemake.bitbucket.io)
 
 # ToDo
 
