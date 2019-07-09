@@ -33,6 +33,8 @@ DEDUPLICATE_BISMARK = config["bismark"]["deduplicate_bismark"]
 BISMARK_METHYLATION_EXTRACTOR = config["bismark"]["bismark_methylation_extractor"]
 BAM2NUC = config["bismark"]["bam2nuc"]
 COVERAGE2CYTOSINE = config["bismark"]["coverage2cytosine"]
+BISMARK2SUMMARY =  config["bismark"]["bismark2summary"]
+
 
 VIEWBS = config["viewbs"]["viewbs"]
 
@@ -102,7 +104,8 @@ rule all:
         "6_viewBS/methGlobal",
         "6_viewBS/MethLevDist",
         expand("6_viewBS/MethGeno_{context}", context = CONTEXTS),
-        "6_viewBS/BisNonConvRate"
+        "6_viewBS/BisNonConvRate",
+	directory("5_multiqc")
 
 
 
@@ -447,27 +450,40 @@ rule ViewBS_BisNonConvRate:
 
 
 
-rule bismark_reports:
-    input:
-        expand(["2_bismark_mapped/{sample}_pe.bam","2_bismark_mapped/{sample}_PE_report.txt","3_deduplicated/{sample}_pe.deduplication_report.txt","4_methylation_extraction/{sample}_pe.deduplicated.M-bias.txt","4_methylation_extraction/{sample}_pe.deduplicated_splitting_report.txt"],sample = SAMPLES.index)
-    output:
-        expand(["5_bismark_summary/{sample}_PE_report.html","5_bismark_summary/{sample}_PE_report.txt"],sample=SAMPLES.index)
-    log:
-        "logs\bismark_reports.log"
-    message: """    ----------  bismark_reports  ----------   """
-    shell:
-        "mkdir 5_bismark_summary && "
-        "cd 5_bismark_summary && "
-        "ln -s ../2_bismark_mapped/*.bam ../2_bismark_mapped/*.txt ../3_deduplicated/*.txt ../4_methylation_extraction/*M-bias.txt ../4_methylation_extraction/*splitting_report.txt ."
-        "/biodata/irg/grp_stich/Hv-DRR-pop/bin/bismark_v0.20.0/Bismark/bismark2summary "
+#rule bismark_reports:
+#    input:     
+#        expand(["3_deduplicated/{sample}-1.1_bismark_bt2_pe.multiple.deduplication_report.txt","4_methylation_extraction/{sample}_pe.deduplicated.M-bias.txt","4_methylation_extraction/{sample}_pe.deduplicated_splitting_report.txt"],sample = SAMPLES.index)
+#    output:
+#        expand(["5_bismark_summary/{sample}-1.1_bismark_bt2_pe.multiple.deduplication_report.txt", "5_bismark_summary/{sample}_pe.deduplicated.M-bias.txt", "5_bismark_summary/{sample}_pe.deduplicated_splitting_report.txt"],sample=SAMPLES.index)
+#    log:
+#        "logs/bismark_reports.log"
+#    message: """    ----------  bismark_reports  ----------   """
+#    shell:
+#        "rm -r 5_bismark_summary &&"
+#        "mkdir 5_bismark_summary && "
+#        "cd 5_bismark_summary && "
+#        "ln -s ../2_bismark_mapped/*.bam ../2_bismark_mapped/*.txt ../3_deduplicated/*.txt ../4_methylation_extraction/*M-bias.txt ../4_methylation_extraction/*splitting_report.txt ."
+        
 
-rule bismark_summary_report:
+#rule bismark_summary_report:
+#    input:
+#        expand(["5_bismark_summary/{sample}-1.1_bismark_bt2_pe.multiple.deduplication_report.txt", "5_bismark_summary/{sample}_pe.deduplicated.M-bias.txt", "5_bismark_summary/{sample}_pe.deduplicated_splitting_report.txt"],sample=SAMPLES.index)
+#    output:
+#        "5_bismark_summary/bismark_summary_report.txt"
+#    log:
+#        "logs/bismark_summary_report.log"
+#    message: """ -----------  running bismark_summary_report for {input}  -------------"""
+#    shell:
+#        "cd 5_bismark_summary && {BISMARK2SUMMARY} "
+
+
+rule multiqcSummaryReport:
     input:
-        expand("5_bismark_summary/{sample}_PE_report.txt", sample = SAMPLES)
+        expand(["3_deduplicated/{sample}-1.1_bismark_bt2_pe.multiple.deduplication_report.txt","4_methylation_extraction/{sample}_pe.deduplicated.M-bias.txt","4_methylation_extraction/{sample}_pe.deduplicated_splitting_report.txt"],sample = SAMPLES.index)
     output:
-        "5_bismark_summary/bismark_summary_report.txt"
+        directory("5_multiqc")
     log:
-        "logs/bismark_summary_report.log"
-    message: """ -----------  running bismark_summary_report for {input}  -------------"""
+        "logs/multiqc.log"
+    message: """ -----------  running multiqc  -------------"""
     shell:
-        "cd 5_bismark_summary && /biodata/irg/grp_stich/Hv-DRR-pop/bin/bismark_v0.20.0/Bismark/bismark2summary "
+        "multiqc -o {output} . "

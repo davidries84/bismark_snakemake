@@ -28,6 +28,7 @@ bismark:
   bismark_methylation_extractor: "/biodata/irg/grp_stich/Hv-DRR-pop/bin/bismark_v0.20.1/Bismark/bismark_methylation_extractor"
   bam2nuc: "/biodata/irg/grp_stich/Hv-DRR-pop/bin/bismark_v0.20.1/Bismark/bam2nuc"
   coverage2cytosine: "/biodata/irg/grp_stich/Hv-DRR-pop/bin/bismark_v0.20.1/Bismark/coverage2cytosine"
+  bismark2summary: "/biodata/irg/grp_stich/Hv-DRR-pop/bin/bismark_v0.20.1/Bismark/bismark2summary"
 
 viewbs:
   viewbs: "/biodata/irg/grp_stich/Hv-DRR-pop/bin/ViewBS_0.6.1/ViewBS-0.1.6/ViewBS"
