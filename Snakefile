@@ -92,11 +92,7 @@ def get_trimmed_fastq2(wildcards):
 
 rule all:
     input:
-        #expand("2_bismark_mapped/{sample}-{unit}_bismark_bt2_pe.bam", sample=SAMPLES.index, unit = UNITS["unit"]),
-        #expand("1_trimmed_reads/{sample}-{unit}.1.fastq.gz", sample=SAMPLES.index, unit = UNITS["unit"]),
-        #expand("1_trimmed_reads/{sample}-{unit}.2.fastq.gz", sample=SAMPLES.index, unit = UNITS["unit"]),
         expand("4_methylation_extraction/{sample}_{context}_100bp.csv", sample = SAMPLES.index, context=CONTEXTS),
-	#expand("4_methylation_extraction/{sample}.bis_rep.cov.DN_report.txt", sample = SAMPLES.index),
 	expand("4_methylation_extraction/{sample}_{context}.contextWithStrand.cov.gz", sample = SAMPLES.index, context=CONTEXTS),
 	expand("3_deduplicated/{sample}_pe.deduplicated.bam", sample = SAMPLES.index),
         #expand("1_trimmed_reads/{sample}-{unit}.{rd}_fastqc.html",sample = SAMPLES.index, unit = UNITS["unit"] , rd = [1,2]),
@@ -105,7 +101,8 @@ rule all:
         "6_viewBS/MethLevDist",
         expand("6_viewBS/MethGeno_{context}", context = CONTEXTS),
         "6_viewBS/BisNonConvRate",
-	directory("5_multiqc")
+	directory("5_multiqc"),
+	expand("bam2nuc/{sample}_pe.deduplicated.nucleotide_stats.txt", sample = SAMPLES.index)
 
 
 
@@ -227,13 +224,13 @@ rule bam2nuc:
         fa=REFERENCE,
         bam="3_deduplicated/{sample}_pe.deduplicated.bam"
     output:
-        "5_bismark_summary/{sample}.nucleotide_stats.txt"
+        "bam2nuc/{sample}_pe.deduplicated.nucleotide_stats.txt"
     log:
         "logs/bam2nuc_{sample}.log"
     message: """ -------- calculating nucleotide stats for {input.bam}  ------- """
 
     shell:
-        "{BAM2NUC} --dir 5_bismark_summary --genome_folder {input.fa}  {input.bam} "
+        "{BAM2NUC} --dir bam2nuc --genome_folder {input.fa}  {input.bam} "
 
 rule bismark_methylation_extractor:
     input:
@@ -246,7 +243,8 @@ rule bismark_methylation_extractor:
         "4_methylation_extraction/{sample}_pe.deduplicated_splitting_report.txt",
         "4_methylation_extraction/{sample}_pe.deduplicated.M-bias.txt",
         "4_methylation_extraction/{sample}_pe.deduplicated.bedGraph.gz",
-        "4_methylation_extraction/{sample}_pe.deduplicated.bismark.cov.gz"
+        "4_methylation_extraction/{sample}_pe.deduplicated.bismark.cov.gz",
+	"4_methylation_extraction/{sample}.bis_rep.cov.CX_report.txt"
     threads: 30
     params:
         outdir = " 4_methylation_extraction "
@@ -258,17 +256,17 @@ rule bismark_methylation_extractor:
         "{BISMARK_METHYLATION_EXTRACTOR} --comprehensive --ignore_r2 2 --gzip --multicore 10 --bedGraph --CX --cytosine_report --genome_folder {input.fa} -o {params.outdir} --buffer_size 10G {input.file}   2> {log}"
 
 
-rule genomewidecytosinemethylationreport:
-    input:
-        fa=REFERENCE,
-        bismarkcov="4_methylation_extraction/{sample}_pe.deduplicated.bismark.cov.gz"
-    output:
-        "4_methylation_extraction/{sample}.bis_rep.cov.CX_report.txt"
-    log:
-     "logs/bismark_genomewidecytosinemethylationreport_{sample}.log"
-    message: """ -------- Witing genome wide cytosine methylation report for {input.bismarkcov}  ------- """
-    shell:
-        "{COVERAGE2CYTOSINE} -CX -o {output} --genome_folder {input.fa} {input.bismarkcov}"
+#rule genomewidecytosinemethylationreport:
+#    input:
+#        fa=REFERENCE,
+#        bismarkcov="4_methylation_extraction/{sample}_pe.deduplicated.bismark.cov.gz"
+#    output:
+#        "4_methylation_extraction/{sample}.bis_rep.cov.CX_report.txt"
+#    log:
+#     "logs/bismark_genomewidecytosinemethylationreport_{sample}.log"
+#    message: """ -------- Witing genome wide cytosine methylation report for {input.bismarkcov}  ------- """
+#    shell:
+#        "{COVERAGE2CYTOSINE} -CX -o {output} --genome_folder {input.fa} {input.bismarkcov}"
 
 rule summarizedinucleotides:
     input:
@@ -285,23 +283,23 @@ rule summarizedinucleotides:
 
 
 
-rule cContextCovFileFromGWCMR:
-    input:
-        gwcmr="4_methylation_extraction/{sample}.bis_rep.cov.CX_report.txt"
-    output:
-        "4_methylation_extraction/{sample}_{context}.context.cov.gz"
-    threads: 3
-    params:
-        con = "{context}"
-    log:
-        "logs/MethylationCoverageFiles/{sample}_{context}.context.cov.log"
-    message: """ -------- Writing methylation coverage file for sample {wildcards.sample} and context {wildcards.context}  ------- """
-    shell:
-        " grep "r'"\s{params.con}\s"'" {input.gwcmr}   "
-        "| awk   '{{ if ($4 == 0 && $5 == 0) ; else if ($4 == 0) "
-        "  printf ("r'"%s\t%s\t%s\t%s\t%s\t%s\n"'", $1, $2, $2, 0, $4, $5);"
-        " else  printf ("r'"%s\t%s\t%s\t%s\t%s\t%s\n"'", $1, $2, $2, ($4/($4+$5))*100, $4, $5);}}' "
-        "| gzip > {output}"
+#rule cContextCovFileFromGWCMR:
+#    input:
+#        gwcmr="4_methylation_extraction/{sample}.bis_rep.cov.CX_report.txt"
+#    output:
+#        "4_methylation_extraction/{sample}_{context}.context.cov.gz"
+#    threads: 3
+#    params:
+#        con = "{context}"
+#    log:
+#        "logs/MethylationCoverageFiles/{sample}_{context}.context.cov.log"
+#    message: """ -------- Writing methylation coverage file for sample {wildcards.sample} and context {wildcards.context}  ------- """
+#    shell:
+#        " grep "r'"\s{params.con}\s"'" {input.gwcmr}   "
+#        "| awk   '{{ if ($4 == 0 && $5 == 0) ; else if ($4 == 0) "
+#        "  printf ("r'"%s\t%s\t%s\t%s\t%s\t%s\n"'", $1, $2, $2, 0, $4, $5);"
+#        " else  printf ("r'"%s\t%s\t%s\t%s\t%s\t%s\n"'", $1, $2, $2, ($4/($4+$5))*100, $4, $5);}}' "
+#        "| gzip > {output}"
 
 
 rule cContextCovFileWithStrandInfoFromGWCMR:
@@ -326,7 +324,7 @@ rule cContextCovFileWithStrandInfoFromGWCMR:
 
 rule cytosinecoveragetiling: # einen pro C context
     input:
-        "4_methylation_extraction/{sample}_{context}.context.cov.gz"
+        "4_methylation_extraction/{sample}_{context}.contextWithStrand.cov.gz"
     output:
         "4_methylation_extraction/{sample}_{context}_100bp.csv"
     log:
