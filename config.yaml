@@ -9,9 +9,9 @@ units: units.tsv
 #adapter: ACGGATCGATCGATCGATCGAT
 
 ref:
-  folder: "0_reference/"
+  folder: "/netscratch/irg/grp_stich/Hv-DRR-pop/experiments/bismark21/0_reference/"
   # the fasta file
-  fasta: "0_reference/160404_barley_pseudomolecules_masked+ChrC.fasta"
+  fasta: "/netscratch/irg/grp_stich/Hv-DRR-pop/experiments/bismark21/0_reference/160404_barley_pseudomolecules_masked+ChrC.fasta"
 
   # gtf file with transcripts
   #annotation: "path/to/annotation.gtf"

@@ -18,24 +18,18 @@ chrom = ""
 methcount = 0
 unmethcount = 0
 
-
-linecount = 0
-
 for line in sys.stdin:
 
 	if (end/windowsize)%100000 == 0:
 		sys.stderr.write("processed " + str(end/windowsize) + " tiles \n")
 
-	if (linecount%100000 == 0):
-                sys.stderr.write("processed " + str(linecount) + " lines \n")
-	linecount += 1
 
 	line = line.strip().split()
 	chromosome = line[0]
 	pos = int(line[1])
 	#end = int(pos[2])
 	meth = int(line[4])
-	unmeth = int(line[5])
+	unmeth = int(line[5]) 
 
 	# if new chromosome, start again
 	if chromosome != chrom:
@@ -59,25 +53,7 @@ for line in sys.stdin:
 
 
 		methcount += meth
-		unmethcount += unmeth
-		
-	elif pos >= end + 100: # skipping empty tiles
-		while pos >= end + 100:
-			methcount = 0
-			unmethcount = 0
-			frac = 'NA'
-			L = [chrom,start,end, frac, methcount, unmethcount]
-			print(*L)
-			start = end +1
-			end += windowsize
-		
-		methcount = meth
-		unmethcount = unmeth
-		start = end +1
-		end += windowsize
-
-
-
+		unmethcount += unmeth		
 	elif pos >= end: # position in next tile, flush old tile, reset counters for new tile
 
 		if methcount+unmethcount == 0:

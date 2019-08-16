@@ -1,3 +1,4 @@
+
 import pandas as pd
 configfile: "config.yaml"
 
@@ -101,7 +102,7 @@ rule all:
         "6_viewBS/MethLevDist",
         expand("6_viewBS/MethGeno_{context}", context = CONTEXTS),
         "6_viewBS/BisNonConvRate",
-	directory("5_multiqc"),
+	"5_multiqc",
 	expand("bam2nuc/{sample}_pe.deduplicated.nucleotide_stats.txt", sample = SAMPLES.index)
 
 
@@ -243,8 +244,8 @@ rule bismark_methylation_extractor:
         "4_methylation_extraction/{sample}_pe.deduplicated_splitting_report.txt",
         "4_methylation_extraction/{sample}_pe.deduplicated.M-bias.txt",
         "4_methylation_extraction/{sample}_pe.deduplicated.bedGraph.gz",
-        "4_methylation_extraction/{sample}_pe.deduplicated.bismark.cov.gz",
-	"4_methylation_extraction/{sample}.bis_rep.cov.CX_report.txt"
+        "4_methylation_extraction/{sample}_pe.deduplicated.bismark.cov.gz"
+#	"4_methylation_extraction/{sample}.bis_rep.cov.CX_report.txt"
     threads: 30
     params:
         outdir = " 4_methylation_extraction "
@@ -256,17 +257,17 @@ rule bismark_methylation_extractor:
         "{BISMARK_METHYLATION_EXTRACTOR} --comprehensive --ignore_r2 2 --gzip --multicore 10 --bedGraph --CX --cytosine_report --genome_folder {input.fa} -o {params.outdir} --buffer_size 10G {input.file}   2> {log}"
 
 
-#rule genomewidecytosinemethylationreport:
-#    input:
-#        fa=REFERENCE,
-#        bismarkcov="4_methylation_extraction/{sample}_pe.deduplicated.bismark.cov.gz"
-#    output:
-#        "4_methylation_extraction/{sample}.bis_rep.cov.CX_report.txt"
-#    log:
-#     "logs/bismark_genomewidecytosinemethylationreport_{sample}.log"
-#    message: """ -------- Witing genome wide cytosine methylation report for {input.bismarkcov}  ------- """
-#    shell:
-#        "{COVERAGE2CYTOSINE} -CX -o {output} --genome_folder {input.fa} {input.bismarkcov}"
+rule genomewidecytosinemethylationreport:
+    input:
+        fa=REFERENCE,
+        bismarkcov="4_methylation_extraction/{sample}_pe.deduplicated.bismark.cov.gz"
+    output:
+        "4_methylation_extraction/{sample}.bis_rep.cov.CX_report.txt"
+    log:
+     "logs/bismark_genomewidecytosinemethylationreport_{sample}.log"
+    message: """ -------- Witing genome wide cytosine methylation report for {input.bismarkcov}  ------- """
+    shell:
+        "{COVERAGE2CYTOSINE} -CX -o {output} --genome_folder {input.fa} {input.bismarkcov}"
 
 rule summarizedinucleotides:
     input:

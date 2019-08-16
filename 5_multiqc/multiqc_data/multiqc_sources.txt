@@ -17,6 +17,15 @@ Bismark	methylation_extraction	B_pe	/netscratch/irg/grp_stich/Hv-DRR-pop/experim
 Bismark	methylation_extraction	I_pe	/netscratch/irg/grp_stich/Hv-DRR-pop/experiments/bismark21/4_methylation_extraction/I_pe.deduplicated_splitting_report.txt
 Bismark	methylation_extraction	C_pe	/netscratch/irg/grp_stich/Hv-DRR-pop/experiments/bismark21/4_methylation_extraction/C_pe.deduplicated_splitting_report.txt
 Bismark	methylation_extraction	D_pe	/netscratch/irg/grp_stich/Hv-DRR-pop/experiments/bismark21/4_methylation_extraction/D_pe.deduplicated_splitting_report.txt
+Bismark	bam2nuc	E_pe	/netscratch/irg/grp_stich/Hv-DRR-pop/experiments/bismark21/bam2nuc/E_pe.deduplicated.nucleotide_stats.txt
+Bismark	bam2nuc	F_pe	/netscratch/irg/grp_stich/Hv-DRR-pop/experiments/bismark21/bam2nuc/F_pe.deduplicated.nucleotide_stats.txt
+Bismark	bam2nuc	G_pe	/netscratch/irg/grp_stich/Hv-DRR-pop/experiments/bismark21/bam2nuc/G_pe.deduplicated.nucleotide_stats.txt
+Bismark	bam2nuc	A_pe	/netscratch/irg/grp_stich/Hv-DRR-pop/experiments/bismark21/bam2nuc/A_pe.deduplicated.nucleotide_stats.txt
+Bismark	bam2nuc	H_pe	/netscratch/irg/grp_stich/Hv-DRR-pop/experiments/bismark21/bam2nuc/H_pe.deduplicated.nucleotide_stats.txt
+Bismark	bam2nuc	B_pe	/netscratch/irg/grp_stich/Hv-DRR-pop/experiments/bismark21/bam2nuc/B_pe.deduplicated.nucleotide_stats.txt
+Bismark	bam2nuc	I_pe	/netscratch/irg/grp_stich/Hv-DRR-pop/experiments/bismark21/bam2nuc/I_pe.deduplicated.nucleotide_stats.txt
+Bismark	bam2nuc	C_pe	/netscratch/irg/grp_stich/Hv-DRR-pop/experiments/bismark21/bam2nuc/C_pe.deduplicated.nucleotide_stats.txt
+Bismark	bam2nuc	D_pe	/netscratch/irg/grp_stich/Hv-DRR-pop/experiments/bismark21/bam2nuc/D_pe.deduplicated.nucleotide_stats.txt
 Bismark	deduplication	A-1.1	/netscratch/irg/grp_stich/Hv-DRR-pop/experiments/bismark21/3_deduplicated/A-1.1_bismark_bt2_pe.multiple.deduplication_report.txt
 Bismark	deduplication	F-1.1	/netscratch/irg/grp_stich/Hv-DRR-pop/experiments/bismark21/3_deduplicated/F-1.1_bismark_bt2_pe.multiple.deduplication_report.txt
 Bismark	deduplication	B-1.1	/netscratch/irg/grp_stich/Hv-DRR-pop/experiments/bismark21/3_deduplicated/B-1.1_bismark_bt2_pe.multiple.deduplication_report.txt
