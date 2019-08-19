@@ -316,7 +316,7 @@ rule cContextCovFileWithStrandInfoFromGWCMR:
     message: """ -------- Writing methylation coverage file with strand info for sample {wildcards.sample} and context {wildcards.context}  ------- """
     shell:
         " grep "r'"\s{params.con}\s"'" {input.gwcmr}   "
-        "| awk   '{{ if ($4 == 0 && $5 == 0) ; else if ($4 == 0) "
+        "| awk   '{{ if ($4 == 0 && $5 == 0) printf ("r'"%s\t%s\t%s\tNA\t%s\t%s\t%s\n"'", $1, $2, $2, $4, $5, $3) ; else if ($4 == 0) "
         "  printf ("r'"%s\t%s\t%s\t%s\t%s\t%s\t%s\n"'", $1, $2, $2, 0, $4, $5, $3);"
         " else  printf ("r'"%s\t%s\t%s\t%s\t%s\t%s\t%s\n"'", $1, $2, $2, ($4/($4+$5))*100, $4, $5, $3);}}' "
         "| gzip > {output}"

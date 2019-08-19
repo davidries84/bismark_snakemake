@@ -57,25 +57,8 @@ for line in sys.stdin:
 
 	if pos >= start and pos < end: # position is in tile, count values
 
-
 		methcount += meth
 		unmethcount += unmeth
-		
-	elif pos >= end + 100: # skipping empty tiles
-		while pos >= end + 100:
-			methcount = 0
-			unmethcount = 0
-			frac = 'NA'
-			L = [chrom,start,end, frac, methcount, unmethcount]
-			print(*L)
-			start = end +1
-			end += windowsize
-		
-		methcount = meth
-		unmethcount = unmeth
-		start = end +1
-		end += windowsize
-
 
 
 	elif pos >= end: # position in next tile, flush old tile, reset counters for new tile
@@ -84,15 +67,26 @@ for line in sys.stdin:
 			frac = 'NA'
 		else:
 			frac = float(methcount)/(methcount+unmethcount)
-		
+
 
 		L = [chrom,start,end, frac, methcount, unmethcount]
 		print(*L)
+
+		while pos >= end + 100:
+			start = end +1
+			end += windowsize
+
+
 		methcount = meth
 		unmethcount = unmeth
 		start = end +1
 		end += windowsize
+ 
+
 		
+
+
+	
 	else:
 		sys.stderr.write("WARNING: unknown case\n")
 		sys.stderr.write(" ".join(line))
